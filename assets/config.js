@@ -7,7 +7,7 @@ window.MA_CONFIG = {
   /** vidéos d'installation pour les parents */
   guideUrl: 'https://math-adventure-app-sooty.vercel.app/guide/',
   /** ID du pixel Meta (laisser vide pour désactiver) */
-  pixelId: '',
+  pixelId: '1149409637780474',
   whatsapp: '2290161879788',
   price: 4900,
   /** prix barré affiché (mettre 0 pour ne pas en afficher) */
