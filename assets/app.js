@@ -15,8 +15,10 @@
 
   // ---------------------------------------------------------------- liens
   var appLink = cfg.appUrl + (cfg.appUrl.indexOf('?') >= 0 ? '&' : '?') + 'utm_source=landing';
+  // data-app="fruit-factory" : ouvre l'appli directement sur l'écran de ce jeu (sans accueil ni prénom)
   $$('[data-app]').forEach(function (a) {
-    a.href = appLink;
+    var jeu = a.getAttribute('data-app');
+    a.href = appLink + (jeu ? '&jeu=' + encodeURIComponent(jeu) : '');
     a.addEventListener('click', function () { track('EssaiDemo', { jeu: a.getAttribute('data-track') }); });
   });
   $$('[data-whatsapp]').forEach(function (a) {
