@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Merci · Math Adventure</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#1a73c8">
+  <link rel="icon" href="assets/icon-192.png">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/config.js"></script>
+  <script src="assets/pixel.js"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top__in">
+      <a class="brand" href="index.html">
+        <img src="assets/tim.svg" alt="" width="36" height="36">
+        <span>Math Adventure</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="thanks">
+    <div class="wrap">
+      <div class="thanks__card" aria-live="polite">
+        <img class="thanks__tim" src="assets/tim.svg" alt="" width="96" height="96">
+
+        <section class="thanks__state" id="s-wait">
+          <div class="spinner" role="img" aria-label="Vérification en cours"></div>
+          <h1>On vérifie votre paiement…</h1>
+          <p class="muted">En général, ça prend moins d’une minute. Gardez cette page ouverte : votre clé s’affiche ici dès que le paiement est validé.</p>
+        </section>
+
+        <section class="thanks__state" id="s-done" hidden>
+          <h1 id="done-title">Merci ! Voici votre clé</h1>
+          <div class="keybox">
+            <code id="key"></code>
+            <button class="btn" type="button" id="copy">Copier</button>
+          </div>
+          <a class="btn btn--buy btn--lg btn--block" id="open-app" href="#">Ouvrir Math Adventure et activer</a>
+          <p class="muted">La clé se colle toute seule sur cet appareil. Sur les autres (jusqu’à 4 en tout), ouvrez <a id="app-link" href="#"></a>, puis <strong>Réglages → Licence</strong>, et collez la même clé.</p>
+          <p class="muted">Vous la retrouvez aussi dans l’e-mail de Chariow. <a id="guide" href="#">Voir les vidéos d’installation</a>.</p>
+        </section>
+
+        <section class="thanks__state" id="s-failed" hidden>
+          <h1>Le paiement n’est pas passé</h1>
+          <p class="muted">Vérifiez le solde de votre compte Mobile Money, puis réessayez. Si votre compte a quand même été débité, <a data-whatsapp href="#" target="_blank" rel="noopener">écrivez-nous sur WhatsApp</a>.</p>
+          <a class="btn btn--buy btn--lg" href="index.html#offre">Réessayer le paiement</a>
+        </section>
+
+        <section class="thanks__state" id="s-unknown" hidden>
+          <h1>Votre clé est dans votre e-mail</h1>
+          <p class="muted">Chariow vous l’a envoyée après le paiement (pensez à regarder dans les spams). Ouvrez ensuite Math Adventure, allez dans <strong>Réglages → Licence</strong> et collez-la.</p>
+          <a class="btn btn--lg" id="open-app-2" href="#">Ouvrir Math Adventure</a>
+          <p class="muted">Pas d’e-mail au bout de 10 minutes ? <a data-whatsapp href="#" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a>, on vous répond.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/merci.js" defer></script>
+</body>
+</html>
