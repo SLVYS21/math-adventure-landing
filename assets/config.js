@@ -1,7 +1,7 @@
 // Réglages de la page de vente — seul fichier à modifier au déploiement.
 window.MA_CONFIG = {
   /** serveur de vente (shop/server), sans « / » final */
-  serverUrl: 'https://VOTRE-SERVEUR.exemple.com',
+  serverUrl: 'https://math-adventure.bisous.me',
   /** l'appli en ligne : sans licence, elle s'ouvre en version d'essai */
   appUrl: 'https://math-adventure-app-sooty.vercel.app/',
   /** vidéos d'installation pour les parents */
