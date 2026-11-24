@@ -111,6 +111,52 @@ a { color: var(--primary); }
   font: 800 1rem/1 var(--font-display); text-decoration: none; white-space: nowrap;
 }
 
+/* ---------------------------------------------------------------- prix de lancement (vraie date de fin) */
+/* rouge #c93526 : 5.2:1 avec le blanc (le --buy #d9412f n'a que 4.4:1 en petit texte) */
+.launch-bar { display: block; background: #c93526; color: var(--white); text-decoration: none; font-size: 0.95rem; }
+.launch-bar.is-last { background: var(--yellow); color: var(--ink); } /* dernières 24 h : inversion, le changement saute aux yeux */
+.launch-bar strong { font-family: var(--font-display); font-weight: 800; color: var(--white); text-transform: uppercase; letter-spacing: 0.04em; }
+.launch-bar.is-last strong { color: var(--buy-shade); }
+.launch-bar__time { font-weight: 700; font-variant-numeric: tabular-nums; }
+.launch-bar { overflow: hidden; white-space: nowrap; }
+.launch-bar__track { display: flex; width: max-content; animation: marquee 28s linear infinite; }
+.launch-bar__group { display: flex; }
+.launch-bar__msg { display: inline-block; line-height: 40px; padding-inline: var(--s5) var(--s7); }
+.launch-bar__msg + .launch-bar__msg::before { content: '★'; margin-right: var(--s5); color: var(--yellow); }
+.launch-bar.is-last .launch-bar__msg + .launch-bar__msg::before { color: var(--buy-shade); }
+/* pause au survol / au clavier : on peut lire tranquillement (linéaire : un défilement continu, pas une transition) */
+.launch-bar:hover .launch-bar__track, .launch-bar:focus-visible .launch-bar__track { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* « Essayer gratuitement » tremble 0,6 s toutes les 4 s pour attirer l'œil (rotate/translate séparés : le :active reste intact) */
+.btn--nudge { animation: nudge 4s var(--ease-out) 1.5s infinite; }
+.btn--nudge:hover, .btn--nudge:focus-visible { animation: none; }
+@keyframes nudge {
+  0%, 15%, 100% { rotate: 0deg; translate: 0 0; }
+  2% { rotate: -4deg; translate: -2px 0; }
+  4.5% { rotate: 4deg; translate: 2px 0; }
+  7% { rotate: -3deg; translate: -1px 0; }
+  9.5% { rotate: 2deg; translate: 1px 0; }
+  12% { rotate: -1deg; translate: 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .launch-bar__track, .btn--nudge { animation: none !important; }
+  .launch-bar { white-space: normal; }
+  .launch-bar__group + .launch-bar__group, .launch-bar__msg + .launch-bar__msg { display: none; }
+  .launch-bar__msg { flex-wrap: wrap; justify-content: center; padding-block: var(--s2); text-align: center; }
+  .launch-bar__track, .launch-bar__group { width: 100%; justify-content: center; }
+}
+.launch-bar[hidden], .launch[hidden] { display: none; }
+#offre, #essai { scroll-margin-top: 40px; } /* la barre allonge l'en-tête collant */
+
+.launch { display: grid; gap: var(--s3); margin-top: var(--s4); padding: var(--s4); border-radius: var(--r-md); background: var(--yellow); }
+.launch__t { font-weight: 700; }
+.launch__note { font-size: 0.95rem; color: var(--ink-soft); }
+.countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s2); }
+.countdown span { display: grid; justify-items: center; padding: var(--s2) var(--s1); border-radius: var(--r-sm); background: var(--white); }
+.countdown b { font: 800 clamp(1.6rem, 7vw, 2rem)/1 var(--font-display); font-variant-numeric: tabular-nums; color: var(--buy-shade); }
+.countdown small { font-size: 0.85rem; color: var(--ink-soft); }
+
 /* ---------------------------------------------------------------- héros */
 .hero {
   background: linear-gradient(180deg, #9fd6fb 0%, var(--sky-50) 70%, var(--white) 100%);

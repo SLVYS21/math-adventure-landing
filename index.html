@@ -26,8 +26,14 @@
         <img src="assets/tim.svg" alt="" width="36" height="36">
         <span>Math Adventure</span>
       </a>
-      <a class="top__cta" href="#offre" data-track="nav-offre">4 900 F · Acheter</a>
+      <a class="top__cta" href="#offre" data-track="nav-offre"><span data-price-short>4 900 F</span> · Acheter</a>
     </div>
+    <a class="launch-bar" href="#offre" data-launch-bar data-track="bar-offre" hidden>
+      <span class="launch-bar__track">
+        <span class="launch-bar__group"><span class="launch-bar__msg"><strong>Prix de lancement</strong> <span data-price-short></span> au lieu de <span data-launch-after></span> jusqu’au <span data-launch-date></span> <span class="launch-bar__time">· fin dans <span data-countdown></span></span></span><span class="launch-bar__msg" aria-hidden="true"><strong>Prix de lancement</strong> <span data-price-short></span> au lieu de <span data-launch-after></span> jusqu’au <span data-launch-date></span> <span class="launch-bar__time">· fin dans <span data-countdown></span></span></span></span>
+        <span class="launch-bar__group" aria-hidden="true"><span class="launch-bar__msg"><strong>Prix de lancement</strong> <span data-price-short></span> au lieu de <span data-launch-after></span> jusqu’au <span data-launch-date></span> <span class="launch-bar__time">· fin dans <span data-countdown></span></span></span><span class="launch-bar__msg"><strong>Prix de lancement</strong> <span data-price-short></span> au lieu de <span data-launch-after></span> jusqu’au <span data-launch-date></span> <span class="launch-bar__time">· fin dans <span data-countdown></span></span></span></span>
+      </span>
+    </a>
   </header>
 
   <main>
@@ -39,7 +45,7 @@
           <h1>Révélez le génie mathématique qui sommeille en votre enfant</h1>
           <p class="lead">30 jeux et plus de 80 activités pour apprendre en manipulant : compter, calculer, mesurer, lire l’heure, rendre la monnaie en francs CFA.</p>
           <div class="hero__actions">
-            <a class="btn btn--primary btn--lg" href="#essai" data-track="hero-essai">Essayer gratuitement</a>
+            <a class="btn btn--primary btn--lg btn--nudge" href="#essai" data-track="hero-essai">Essayer gratuitement</a>
             <p class="hero__note">Sans inscription · 4 jeux ouverts tout de suite</p>
           </div>
           <a class="link-strong" href="#offre" data-track="hero-offre">Ou débloquez les 30 jeux : 4 900 F CFA, une seule fois →</a>
@@ -165,6 +171,16 @@
           <h2 id="offre-t">La version complète</h2>
           <p class="price"><s class="price__old" data-old-price></s> <span class="price__now" data-price></span></p>
           <p class="offer__sub">Un paiement unique. Disponible à vie. Aucun abonnement.</p>
+          <div class="launch" data-launch hidden>
+            <p class="launch__t">Prix de lancement jusqu’au <strong data-launch-date></strong>. Ensuite, la version complète passe à <strong data-launch-after></strong>.</p>
+            <div class="countdown" role="timer" data-countdown-boxes>
+              <span><b data-cd="d">00</b><small>jours</small></span>
+              <span><b data-cd="h">00</b><small>heures</small></span>
+              <span><b data-cd="m">00</b><small>min</small></span>
+              <span><b data-cd="s">00</b><small>s</small></span>
+            </div>
+            <p class="launch__note">Les 4 jeux d’essai, eux, restent gratuits.</p>
+          </div>
 
           <form class="form" id="checkout" novalidate>
             <div class="form__row">
@@ -239,7 +255,7 @@
   </footer>
 
   <div class="sticky" id="sticky" aria-hidden="true">
-    <span><strong data-price></strong><small>une seule fois</small></span>
+    <span><strong data-price></strong><small data-sticky-note>une seule fois</small></span>
     <a class="btn btn--buy" href="#offre" tabindex="-1" data-track="sticky-offre">Acheter</a>
   </div>
 

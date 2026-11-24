@@ -7,11 +7,48 @@
   var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Le franc CFA est arrimé à l'euro : Meta reçoit la valeur en euros (même calcul que le serveur).
-  var EUR = Math.round((cfg.price / 655.957) * 100) / 100;
-  var fcfa = function (n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' F CFA'; };
+  // Prix de lancement : une vraie date de fin, la même pour tout le monde. Passée, la page affiche le nouveau prix.
+  var launch = cfg.launch && cfg.launch.endsAt ? cfg.launch : null;
+  var launchEnd = launch ? new Date(launch.endsAt).getTime() : 0;
+  var inLaunch = !!launch && Date.now() < launchEnd;
+  var price = launch && !inLaunch ? launch.priceAfter : cfg.price;
+  var oldPrice = inLaunch ? (cfg.oldPrice || launch.priceAfter) : (launch ? 0 : cfg.oldPrice);
 
-  $$('[data-price]').forEach(function (el) { el.textContent = fcfa(cfg.price); });
-  $$('[data-old-price]').forEach(function (el) { if (cfg.oldPrice) el.textContent = fcfa(cfg.oldPrice); else el.remove(); });
+  var EUR = Math.round((price / 655.957) * 100) / 100;
+  var sep = function (n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); };
+  var fcfa = function (n) { return sep(n) + ' F CFA'; };
+
+  $$('[data-price]').forEach(function (el) { el.textContent = fcfa(price); });
+  $$('[data-price-short]').forEach(function (el) { el.textContent = sep(price) + ' F'; });
+  $$('[data-old-price]').forEach(function (el) { if (oldPrice) el.textContent = fcfa(oldPrice); else el.remove(); });
+
+  if (inLaunch) {
+    var dateTxt;
+    try { dateTxt = new Date(launchEnd).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Africa/Lagos' }); }
+    catch (e) { dateTxt = new Date(launchEnd).toLocaleDateString('fr-FR'); }
+    $$('[data-launch-date]').forEach(function (el) { el.textContent = dateTxt; });
+    $$('[data-launch-after]').forEach(function (el) { el.textContent = sep(launch.priceAfter) + ' F'; });
+    $$('[data-launch], [data-launch-bar]').forEach(function (el) { el.hidden = false; });
+    var bar = $('[data-launch-bar]');
+    var boxes = $('[data-countdown-boxes]');
+    if (boxes) boxes.setAttribute('aria-label', 'Le prix de lancement se termine le ' + dateTxt);
+    var cd = { d: $('[data-cd="d"]'), h: $('[data-cd="h"]'), m: $('[data-cd="m"]'), s: $('[data-cd="s"]') };
+    var note = $('[data-sticky-note]');
+    var pad = function (n) { return n < 10 ? '0' + n : String(n); };
+    var tick = function () {
+      var left = launchEnd - Date.now();
+      if (left <= 0) { location.reload(); return; } // l'échéance tombe pendant la visite : la page passe au nouveau prix
+      var t = Math.floor(left / 1000);
+      var d = Math.floor(t / 86400), h = Math.floor(t / 3600) % 24, m = Math.floor(t / 60) % 60, s = t % 60;
+      var txt = (d ? d + ' j ' : '') + pad(h) + ' h ' + pad(m) + ' min ' + pad(s) + ' s';
+      $$('[data-countdown]').forEach(function (el) { el.textContent = txt; });
+      if (cd.d) { cd.d.textContent = pad(d); cd.h.textContent = pad(h); cd.m.textContent = pad(m); cd.s.textContent = pad(s); }
+      if (note) note.textContent = d ? 'prix de lancement · encore ' + d + ' j' : 'prix de lancement · fin aujourd’hui';
+      if (bar) bar.classList.toggle('is-last', left < 86400000); // dernières 24 h : la barre passe au rouge
+      setTimeout(tick, 1000 - (Date.now() % 1000));
+    };
+    tick();
+  }
 
   // ---------------------------------------------------------------- liens
   var appLink = cfg.appUrl + (cfg.appUrl.indexOf('?') >= 0 ? '&' : '?') + 'utm_source=landing';
