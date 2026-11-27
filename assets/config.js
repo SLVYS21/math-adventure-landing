@@ -18,10 +18,5 @@ window.MA_CONFIG = {
    * (puis mettre price = priceAfter et launch = null ici).
    */
   launch: { endsAt: '2026-12-05T23:59:59+01:00', priceAfter: 7900 },
-  /** pays du numéro proposé si le lien de la pub (?c=bf) et le fuseau horaire du téléphone ne disent rien */
-  defaultCountry: 'BF',
-  /** ID du projet Microsoft Clarity (clarity.microsoft.com → Paramètres → ID du projet ; vide = désactivé) */
-  clarityId: '',
-  /** réduction du code personnel montré aux visiteurs qui reviennent (code Chariow MATH1000 côté serveur ; 0 = désactivé) */
-  promoOff: 1000,
+  defaultCountry: 'BJ',
 };
