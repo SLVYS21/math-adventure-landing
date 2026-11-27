@@ -4,6 +4,7 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var track = window.maTrack || function () {};
+  var visit = window.maVisit || { id: '', ref: '', step: function () {}, leftForDemo: function () {} };
   var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Le franc CFA est arrimé à l'euro : Meta reçoit la valeur en euros (même calcul que le serveur).
@@ -14,6 +15,7 @@
   var price = launch && !inLaunch ? launch.priceAfter : cfg.price;
   var oldPrice = inLaunch ? (cfg.oldPrice || launch.priceAfter) : (launch ? 0 : cfg.oldPrice);
 
+  window.maPrice = price;
   var EUR = Math.round((price / 655.957) * 100) / 100;
   var sep = function (n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); };
   var fcfa = function (n) { return sep(n) + ' F CFA'; };
@@ -31,7 +33,7 @@
     $$('[data-launch], [data-launch-bar]').forEach(function (el) { el.hidden = false; });
     var bar = $('[data-launch-bar]');
     var boxes = $('[data-countdown-boxes]');
-    if (boxes) boxes.setAttribute('aria-label', 'Le prix de lancement se termine le ' + dateTxt);
+    if (boxes) boxes.setAttribute('aria-label', 'L’offre Black Friday se termine le ' + dateTxt);
     var cd = { d: $('[data-cd="d"]'), h: $('[data-cd="h"]'), m: $('[data-cd="m"]'), s: $('[data-cd="s"]') };
     var note = $('[data-sticky-note]');
     var pad = function (n) { return n < 10 ? '0' + n : String(n); };
@@ -43,7 +45,7 @@
       var txt = (d ? d + ' j ' : '') + pad(h) + ' h ' + pad(m) + ' min ' + pad(s) + ' s';
       $$('[data-countdown]').forEach(function (el) { el.textContent = txt; });
       if (cd.d) { cd.d.textContent = pad(d); cd.h.textContent = pad(h); cd.m.textContent = pad(m); cd.s.textContent = pad(s); }
-      if (note) note.textContent = d ? 'prix de lancement · encore ' + d + ' j' : 'prix de lancement · fin aujourd’hui';
+      if (note) note.textContent = d ? 'Black Friday · encore ' + d + ' j' : 'Black Friday · fin aujourd’hui';
       if (bar) bar.classList.toggle('is-last', left < 86400000); // dernières 24 h : la barre passe au rouge
       setTimeout(tick, 1000 - (Date.now() % 1000));
     };
@@ -51,16 +53,30 @@
   }
 
   // ---------------------------------------------------------------- liens
-  var appLink = cfg.appUrl + (cfg.appUrl.indexOf('?') >= 0 ? '&' : '?') + 'utm_source=landing';
+  // v : le même visiteur dans l'appli d'essai, puis à son retour sur cette page
+  var appLink = cfg.appUrl + (cfg.appUrl.indexOf('?') >= 0 ? '&' : '?') + 'utm_source=landing' + (visit.id ? '&v=' + visit.id : '');
   // data-app="fruit-factory" : ouvre l'appli directement sur l'écran de ce jeu (sans accueil ni prénom)
   $$('[data-app]').forEach(function (a) {
     var jeu = a.getAttribute('data-app');
     a.href = appLink + (jeu ? '&jeu=' + encodeURIComponent(jeu) : '');
-    a.addEventListener('click', function () { track('EssaiDemo', { jeu: a.getAttribute('data-track') }); });
+    a.addEventListener('click', function () {
+      track('EssaiDemo', { jeu: a.getAttribute('data-track') });
+      visit.step('demo', { jeu: jeu });
+      visit.leftForDemo();
+    });
+  });
+  $$('[data-track]').forEach(function (a) {
+    if (a.hasAttribute('data-app')) return;
+    a.addEventListener('click', function () { visit.step('cta', { id: a.getAttribute('data-track') }); });
+  });
+  // « Plus tard » : le parent nous écrit lui-même sur WhatsApp (il garde le lien, on peut le relancer)
+  $$('[data-later]').forEach(function (a) {
+    a.href = 'https://wa.me/' + cfg.whatsapp + '?text=' + encodeURIComponent('Bonjour ! Je n’ai pas le temps maintenant. Pouvez-vous m’envoyer le lien de Math Adventure pour plus tard ? (réf. ' + visit.ref + ')');
+    a.addEventListener('click', function () { visit.step('later'); track('Lead', { content_name: 'plus-tard' }); });
   });
   $$('[data-whatsapp]').forEach(function (a) {
     a.href = 'https://wa.me/' + cfg.whatsapp + '?text=' + encodeURIComponent('Bonjour, j’ai une question sur Math Adventure.');
-    a.addEventListener('click', function () { track('Contact'); });
+    a.addEventListener('click', function () { track('Contact'); visit.step('wa'); });
   });
   track('ViewContent', { content_ids: ['math-adventure'], content_type: 'product', value: EUR, currency: 'EUR' });
 
@@ -79,6 +95,17 @@
       });
     }, { rootMargin: '120px 0px', threshold: 0.2 });
     videos.forEach(function (v) { io.observe(v); });
+  }
+
+  // Le prix a été vu : l'offre est restée au moins un instant à l'écran
+  var offerEl = $('#offre');
+  if (offerEl && 'IntersectionObserver' in window) {
+    var seen = new IntersectionObserver(function (e) {
+      if (!e[0].isIntersecting) return;
+      seen.disconnect();
+      visit.step('offer');
+    }, { threshold: 0.3 });
+    seen.observe(offerEl);
   }
 
   // ---------------------------------------------------------------- barre d'achat collante (mobile)
@@ -107,11 +134,22 @@
   var form = $('#checkout');
   if (!form) return;
   var sel = $('#f-country');
+  // Pays du numéro : ?c=bf dans le lien de la pub, sinon le fuseau horaire du téléphone, sinon le pays par défaut
+  var TZ = {
+    'Africa/Ouagadougou': 'BF', 'Africa/Porto-Novo': 'BJ', 'Africa/Abidjan': 'CI', 'Africa/Dakar': 'SN', 'Africa/Lome': 'TG',
+    'Africa/Bamako': 'ML', 'Africa/Niamey': 'NE', 'Africa/Douala': 'CM', 'Africa/Libreville': 'GA', 'Africa/Brazzaville': 'CG',
+    'Africa/Kinshasa': 'CD', 'Africa/Lubumbashi': 'CD', 'Africa/Conakry': 'GN', 'Africa/Ndjamena': 'TD', 'Indian/Antananarivo': 'MG',
+    'Europe/Paris': 'FR', 'Europe/Brussels': 'BE',
+  };
+  var known = function (c) { return COUNTRIES.some(function (x) { return x[0] === c; }) ? c : ''; };
+  var tz = '';
+  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+  var country = known((new URLSearchParams(location.search).get('c') || '').toUpperCase()) || known(TZ[tz] || '') || cfg.defaultCountry;
   COUNTRIES.forEach(function (c) {
     var o = document.createElement('option');
     o.value = c[0];
     o.textContent = c[1] + ' +' + c[2];
-    if (c[0] === cfg.defaultCountry) o.selected = true;
+    if (c[0] === country) o.selected = true;
     sel.appendChild(o);
   });
 
@@ -119,6 +157,7 @@
   form.addEventListener('focusin', function () {
     if (started) return;
     started = true;
+    visit.step('form');
     track('InitiateCheckout', { value: EUR, currency: 'EUR', num_items: 1, content_ids: ['math-adventure'] });
   });
 
@@ -172,6 +211,7 @@
     busy(true);
     var body = Object.assign({}, d, {
       src: 'landing',
+      v: visit.id,
       fbp: window.maCookie ? window.maCookie('_fbp') : '',
       fbc: window.maCookie ? window.maCookie('_fbc') : '',
       url: location.href.split('#')[0],

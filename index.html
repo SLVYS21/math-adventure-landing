@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="assets/styles.css">
   <script src="assets/config.js"></script>
   <script src="assets/pixel.js"></script>
+  <script src="assets/visit.js"></script>
 </head>
 <body>
   <a class="skip" href="#essai">Aller aux jeux à essayer</a>
@@ -30,8 +31,8 @@
     </div>
     <a class="launch-bar" href="#offre" data-launch-bar data-track="bar-offre" hidden>
       <span class="launch-bar__track">
-        <span class="launch-bar__group"><span class="launch-bar__msg"><strong>Prix de lancement</strong> <span data-price-short></span> au lieu de <span data-launch-after></span> jusqu’au <span data-launch-date></span> <span class="launch-bar__time">· fin dans <span data-countdown></span></span></span><span class="launch-bar__msg" aria-hidden="true"><strong>Prix de lancement</strong> <span data-price-short></span> au lieu de <span data-launch-after></span> jusqu’au <span data-launch-date></span> <span class="launch-bar__time">· fin dans <span data-countdown></span></span></span></span>
-        <span class="launch-bar__group" aria-hidden="true"><span class="launch-bar__msg"><strong>Prix de lancement</strong> <span data-price-short></span> au lieu de <span data-launch-after></span> jusqu’au <span data-launch-date></span> <span class="launch-bar__time">· fin dans <span data-countdown></span></span></span><span class="launch-bar__msg"><strong>Prix de lancement</strong> <span data-price-short></span> au lieu de <span data-launch-after></span> jusqu’au <span data-launch-date></span> <span class="launch-bar__time">· fin dans <span data-countdown></span></span></span></span>
+        <span class="launch-bar__group"><span class="launch-bar__msg"><strong>Spécial Black Friday</strong> <span data-price-short></span> au lieu de <span data-launch-after></span> jusqu’au <span data-launch-date></span> <span class="launch-bar__time">· fin dans <span data-countdown></span></span></span><span class="launch-bar__msg" aria-hidden="true"><strong>Spécial Black Friday</strong> <span data-price-short></span> au lieu de <span data-launch-after></span> jusqu’au <span data-launch-date></span> <span class="launch-bar__time">· fin dans <span data-countdown></span></span></span></span>
+        <span class="launch-bar__group" aria-hidden="true"><span class="launch-bar__msg"><strong>Spécial Black Friday</strong> <span data-price-short></span> au lieu de <span data-launch-after></span> jusqu’au <span data-launch-date></span> <span class="launch-bar__time">· fin dans <span data-countdown></span></span></span><span class="launch-bar__msg"><strong>Spécial Black Friday</strong> <span data-price-short></span> au lieu de <span data-launch-after></span> jusqu’au <span data-launch-date></span> <span class="launch-bar__time">· fin dans <span data-countdown></span></span></span></span>
       </span>
     </a>
   </header>
@@ -172,7 +173,7 @@
           <p class="price"><s class="price__old" data-old-price></s> <span class="price__now" data-price></span></p>
           <p class="offer__sub">Un paiement unique. Disponible à vie. Aucun abonnement.</p>
           <div class="launch" data-launch hidden>
-            <p class="launch__t">Prix de lancement jusqu’au <strong data-launch-date></strong>. Ensuite, la version complète passe à <strong data-launch-after></strong>.</p>
+            <p class="launch__t">Spécial Black Friday jusqu’au <strong data-launch-date></strong>. Ensuite, la version complète passe à <strong data-launch-after></strong>.</p>
             <div class="countdown" role="timer" data-countdown-boxes>
               <span><b data-cd="d">00</b><small>jours</small></span>
               <span><b data-cd="h">00</b><small>heures</small></span>
@@ -222,6 +223,7 @@
             <button class="btn btn--buy btn--lg btn--block" type="submit" id="pay">Payer <span data-price></span></button>
             <p class="form__secure">Paiement sécurisé par Chariow : Mobile Money ou carte bancaire. Vous recevez la clé dès que le paiement est validé.</p>
           </form>
+          <p class="later">Pas le temps maintenant ? <a data-later href="#" target="_blank" rel="noopener">Recevez le lien sur WhatsApp</a> pour y revenir plus tard.</p>
         </div>
 
         <ol class="steps" aria-label="Après le paiement">
@@ -260,5 +262,6 @@
   </div>
 
   <script src="assets/app.js" defer></script>
+  <script src="assets/promo.js" defer></script>
 </body>
 </html>
