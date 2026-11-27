@@ -23,5 +23,5 @@ window.MA_CONFIG = {
   /** ID du projet Microsoft Clarity (clarity.microsoft.com → Paramètres → ID du projet ; vide = désactivé) */
   clarityId: 'zk9uufyf0p',
   /** réduction du code personnel montré aux visiteurs qui reviennent (code Chariow MATH1000 côté serveur ; 0 = désactivé) */
-  promoOff: 1000,
+  promoOff: 0,
 };
