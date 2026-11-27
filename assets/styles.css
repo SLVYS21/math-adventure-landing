@@ -344,6 +344,49 @@ a { color: var(--primary); }
 .sticky .btn { min-width: 150px; }
 @media (min-width: 900px) { .sticky { display: none; } }
 
+/* ---------------------------------------------------------------- code personnel (visiteur qui revient) */
+.later { color: var(--ink-soft); font-size: 1rem; text-align: center; }
+.later a { color: var(--wa); font-weight: 700; display: inline-block; min-height: 44px; line-height: 44px; }
+.promo-on {
+  padding: var(--s2) var(--s3); border-radius: var(--r-sm);
+  border: 2px dashed var(--buy); background: #fff6f4; color: var(--ink); font-weight: 700; line-height: 1.4;
+}
+.promo-on[hidden] { display: none; }
+.promo-on__t { font-variant-numeric: tabular-nums; color: var(--buy-shade); }
+
+/* panneau du bas : monte depuis le bord (là où est le pouce), se ferme d'un geste ; au-dessus de la barre collante */
+.sheet { position: fixed; inset: 0; z-index: 60; display: flex; align-items: flex-end; justify-content: center; }
+.sheet__scrim { position: absolute; inset: 0; background: rgba(27, 42, 74, 0.45); opacity: 0; transition: opacity 200ms var(--ease-in); }
+.sheet__card {
+  position: relative; width: 100%; max-width: 460px;
+  display: grid; gap: var(--s3); justify-items: center; text-align: center;
+  padding: var(--s6) var(--s5) calc(var(--s5) + env(safe-area-inset-bottom));
+  background: var(--white); border-radius: var(--r-lg) var(--r-lg) 0 0; box-shadow: 0 -12px 40px rgba(27, 42, 74, 0.25);
+  transform: translateY(100%); transition: transform 200ms var(--ease-in);
+}
+.sheet.is-in .sheet__scrim { opacity: 1; transition: opacity 280ms var(--ease-out); }
+.sheet.is-in .sheet__card { transform: translateY(0); transition: transform 340ms var(--ease-out); }
+@media (min-width: 600px) {
+  .sheet { align-items: center; padding: var(--gutter); }
+  .sheet__card { border-radius: var(--r-lg); transform: translateY(24px); opacity: 0; transition: transform 200ms var(--ease-in), opacity 200ms var(--ease-in); }
+  .sheet.is-in .sheet__card { opacity: 1; transition: transform 340ms var(--ease-out), opacity 240ms var(--ease-out); }
+}
+.sheet__tim { width: 64px; height: 64px; margin-top: calc(-1 * var(--s7)); filter: drop-shadow(0 6px 10px rgba(27, 42, 74, 0.2)); }
+.sheet__card h2 { font-size: 1.75rem; }
+.sheet__card p { max-width: 36ch; }
+.sheet__code {
+  display: flex; align-items: center; gap: var(--s3);
+  padding: var(--s2) var(--s4); border: 3px dashed var(--buy); border-radius: var(--r-md); background: #fff6f4;
+}
+.sheet__code span { color: var(--ink-soft); font-size: 0.95rem; }
+.sheet__code strong { font: 800 1.6rem/1.2 var(--font-display); letter-spacing: 0.08em; }
+.sheet__time { color: var(--ink-soft); }
+.sheet__time strong { color: var(--buy-shade); font-variant-numeric: tabular-nums; }
+.sheet__no {
+  min-height: 44px; padding: 0 var(--s4); border: 0; background: none;
+  color: var(--ink-soft); font: 700 1rem var(--font-body); text-decoration: underline; cursor: pointer;
+}
+
 /* ---------------------------------------------------------------- page merci */
 .thanks { min-height: 70vh; padding-block: var(--s7); background: linear-gradient(180deg, #9fd6fb, var(--sky-50) 45%, var(--white)); }
 .thanks__card { max-width: 620px; margin-inline: auto; display: grid; gap: var(--s4); padding: var(--s6) var(--s5); background: var(--white); border-radius: var(--r-lg); box-shadow: var(--lift); }
