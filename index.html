@@ -333,17 +333,10 @@
           </div>
 
           <form class="form" id="checkout" novalidate>
-            <div class="form__row">
-              <div class="field">
-                <label for="f-first">Prénom</label>
-                <input id="f-first" name="first_name" autocomplete="given-name" required maxlength="50">
-                <p class="field__err" id="e-first_name" hidden></p>
-              </div>
-              <div class="field">
-                <label for="f-last">Nom</label>
-                <input id="f-last" name="last_name" autocomplete="family-name" required maxlength="50">
-                <p class="field__err" id="e-last_name" hidden></p>
-              </div>
+            <div class="field">
+              <label for="f-first">Nom</label>
+              <input id="f-first" name="first_name" autocomplete="name" required maxlength="50">
+              <p class="field__err" id="e-first_name" hidden></p>
             </div>
             <div class="field">
               <label for="f-phone">Numéro Mobile Money</label>

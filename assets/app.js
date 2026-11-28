@@ -161,7 +161,7 @@
     track('InitiateCheckout', { value: EUR, currency: 'EUR', num_items: 1, content_ids: ['math-adventure'] });
   });
 
-  var fields = ['first_name', 'last_name', 'phone', 'country_code', 'email', 'discount_code'];
+  var fields = ['first_name', 'phone', 'country_code', 'email', 'discount_code'];
   function setErrors(errs) {
     var first = null;
     fields.forEach(function (k) {
@@ -184,8 +184,7 @@
   }
   function validate(d) {
     var e = {};
-    if (!d.first_name) e.first_name = 'Écrivez votre prénom.';
-    if (!d.last_name) e.last_name = 'Écrivez votre nom.';
+    if (!d.first_name) e.first_name = 'Écrivez votre nom.';
     if (d.phone.replace(/\D/g, '').length < 6) e.phone = 'Ce numéro est trop court.';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) e.email = 'Cette adresse e-mail ne semble pas complète (exemple : nom@gmail.com).';
     return e;
@@ -209,7 +208,9 @@
     if (Object.keys(errs).length) return;
 
     busy(true);
+    // Un seul champ « Nom » : le serveur (et Chariow) attend prénom + nom, on duplique.
     var body = Object.assign({}, d, {
+      last_name: d.first_name,
       src: 'landing',
       v: visit.id,
       fbp: window.maCookie ? window.maCookie('_fbp') : '',
@@ -223,7 +224,10 @@
       .then(function (res) {
         if (!res.ok) {
           busy(false);
-          if (res.errors) setErrors(res.errors);
+          if (res.errors) {
+            if (res.errors.last_name && !res.errors.first_name) res.errors.first_name = res.errors.last_name;
+            setErrors(res.errors);
+          }
           else formError(res.message || 'Le paiement ne s’ouvre pas. Réessayez dans une minute, ou écrivez-nous sur WhatsApp.');
           return;
         }
